@@ -1,0 +1,99 @@
+<?php
+if (isset($_GET['pageno'])) {
+            $pageno = $_GET['pageno'];
+        } else {
+            $pageno = 1;
+        } 
+		$previous_page = $pageno - 1;
+		$next_page = $pageno + 1;
+		$group='';
+		if (isset($_GET['user'])) {
+							$group = '&user='.$_GET['user'];
+		}
+ 	  $actual_link = "http://$_SERVER[HTTP_HOST]/anonchief_platform?u=user_lists$group";
+	   
+			$total_pages =  ceil($total_rows / $no_of_records_per_page);
+			if($total_pages>1){
+				?>
+         
+
+	
+	
+<ul class="pagination">
+	<?php // if($pageno > 1){ echo "<li><a href='?pageno=1'>First Page</a></li>"; } ?>
+    
+	<li <?php if($pageno <= 1){ echo "class='disabled'"; } ?>>
+	<a <?php if($pageno > 1){ echo "href='$actual_link&pageno=$previous_page'"; } ?>>Previous</a>
+	</li>
+       
+    <?php  	
+	
+		$adjacents = "1"; 
+	$second_last = $total_pages - 1;
+	if ($total_pages <= 10){  	 
+		for ($counter = 1; $counter <= $total_pages; $counter++){
+			if ($counter == $pageno) {
+		   echo "<li class='active'><a>$counter</a></li>";	
+				}else{
+           echo "<li><a href='$actual_link&pageno=$counter'>$counter</a></li>";
+				}
+        }
+	}
+	elseif($total_pages > 10){
+		
+	if($pageno <= 3) {			
+	 for ($counter = 1; $counter < 8; $counter++){		 
+	 if($counter == $page_no){ $active= "active";}	
+			if ($counter == $pageno) {
+		   echo "<li class='active'><a>$counter</a></li>";	
+				}else{
+           echo "<li><a href='$actual_link&pageno=$counter' class='$active'>$counter</a></li>";
+				}
+        }
+		echo "<li><a>...</a></li>";
+		echo "<li><a href='$actual_link&pageno=$second_last' class='$active'>$second_last</a></li>";
+		echo "<li><a href='$actual_link&pageno=$total_pages' class='$active'>$total_pages</a></li>";
+		}
+
+	 elseif($pageno > 3 && $pageno < $total_pages - 3) {		 
+		echo "<li><a href='$actual_link&pageno=1'>1</a></li>";
+		echo "<li><a href='$actual_link&pageno=2'>2</a></li>";
+        echo "<li><a>...</a></li>";
+        for ($counter = $pageno - 1; $counter <= $pageno + 2; $counter++) {			
+           if ($counter == $pageno) {
+		   echo "<li class='active'><a>$counter</a></li>";	
+				}else{
+           echo "<li><a href='$actual_link&pageno=$counter' class='$active'>$counter</a></li>";
+				}                  
+       }
+       echo "<li><a>...</a></li>";
+	   echo "<li><a href='$actual_link&pageno=$second_last' class='$active'>$second_last</a></li>";
+	   echo "<li><a href='$actual_link&pageno=$total_pages' class='$active'>$total_pages</a></li>";      
+            }
+		
+		else {
+        echo "<li><a href='$actual_link&pageno=1'>1</a></li>";
+		echo "<li><a href='$actual_link&pageno=2'>2</a></li>";
+        echo "<li><a>...</a></li>";
+
+        for ($counter = $total_pages - 4; $counter <= $total_pages; $counter++) {
+          if ($counter == $pageno) {
+		   echo "<li class='active'><a>$counter</a></li>";	
+				}else{
+           echo "<li><a href='$actual_link&pageno=$counter' class='$active'>$counter</a></li>";
+				}                   
+                }
+            }
+	}
+?>
+    
+	<li <?php if($pageno >= $total_pages){ echo "class='disabled'"; } ?>>
+	<a <?php if($pageno < $total_pages) { echo "href='$actual_link&pageno=$next_page'"; } ?>>Next</a>
+	</li>
+    <?php if($pageno < $total_pages){
+		echo "<li><a href='$actual_link&pageno=$total_pages'>Last &rsaquo;&rsaquo;</a></li>";
+		} ?>
+</ul>
+
+	
+			<?php  } ?>
